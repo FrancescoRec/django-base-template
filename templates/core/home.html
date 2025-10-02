@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Zakat{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">Benvenuto in Zakat!</h1>
+            <p class="lead">
+                Questo è il sistema di gestione Zakat. Sei autenticato come <strong>{{ user.username }}</strong>.
+            </p>
+            <hr class="my-4">
+            <p>
+                Da qui puoi accedere a tutte le funzionalità del sistema.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Dashboard</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Visualizza le statistiche e informazioni principali.</p>
+                <a href="#" class="btn btn-primary">Vai alla Dashboard</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Gestione</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Gestisci i dati e le configurazioni del sistema.</p>
+                <a href="#" class="btn btn-secondary">Gestisci</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Rapporti</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Genera e visualizza rapporti dettagliati.</p>
+                <a href="#" class="btn btn-success">Vedi Rapporti</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Informazioni Utente</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Nome utente:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email|default:"Non specificata" }}</p>
+                <p><strong>Ultimo accesso:</strong> {{ user.last_login|date:"d/m/Y H:i" }}</p>
+                <p><strong>Data registrazione:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
