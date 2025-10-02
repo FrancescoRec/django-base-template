@@ -1,18 +1,19 @@
-# Zakat - Django 5 Project
+# Django Base Project Template
 
-A Django 5 application for Zakat management with PostgreSQL database, Docker support, and production-ready configuration.
+A comprehensive Django 5 base project template with PostgreSQL database, Docker support, and production-ready configuration. This template provides a solid foundation for building Django applications with modern best practices.
 
 ## Features
 
-- Django 5.0+ with Python 3.11+
-- Separated settings for development and production
-- PostgreSQL database with SQLite fallback for development
-- Docker and Docker Compose support
-- User authentication with login/logout
-- Bootstrap-styled templates
-- WhiteNoise for static file serving
-- Production-ready security settings
-- Gunicorn WSGI server for production
+- **Django 5.0+** with Python 3.11+
+- **Modular Settings** - Separated settings for development, staging, and production
+- **Database Support** - PostgreSQL with SQLite fallback for development
+- **Docker Ready** - Complete Docker and Docker Compose configuration
+- **Authentication** - Built-in user authentication with login/logout
+- **Modern UI** - Bootstrap-styled responsive templates
+- **Static Files** - WhiteNoise for static file serving
+- **Production Ready** - Security settings and Gunicorn WSGI server
+- **Environment Management** - Comprehensive environment variable configuration
+- **Development Tools** - Ready for debugging and testing
 
 ## Quick Start (Windows PowerShell)
 
@@ -67,41 +68,38 @@ docker-compose up --build
 ## Project Structure
 
 ```
-zakat/
+django-base/
 ├── config/                 # Django project configuration
-│   ├── settings/          # Split settings
+│   ├── settings/          # Split settings for different environments
 │   │   ├── __init__.py
-│   │   ├── base.py        # Common settings
+│   │   ├── base.py        # Common settings shared across environments
 │   │   ├── local.py       # Development settings
 │   │   └── prod.py        # Production settings
 │   ├── __init__.py
-│   ├── asgi.py
-│   ├── urls.py
-│   └── wsgi.py
-├── core/                   # Main application
+│   ├── asgi.py           # ASGI configuration
+│   ├── urls.py           # Main URL configuration
+│   └── wsgi.py           # WSGI configuration
+├── core/                   # Main application (rename as needed)
 │   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── models.py
-│   ├── tests.py
-│   ├── urls.py
-│   └── views.py
+│   ├── admin.py          # Django admin configuration
+│   ├── apps.py           # App configuration
+│   ├── models.py         # Database models
+│   ├── tests.py          # Test cases
+│   ├── urls.py           # App URL patterns
+│   └── views.py          # View functions/classes
 ├── templates/              # HTML templates
-│   ├── base.html
+│   ├── base.html         # Base template with Bootstrap
 │   ├── core/
-│   │   └── home.html
+│   │   └── home.html     # Home page template
 │   └── registration/
-│       └── login.html
+│       └── login.html    # Login page template
 ├── static/                 # Static files (CSS, JS, images)
 ├── media/                  # User uploaded files
-├── staticfiles/            # Collected static files (production)
 ├── docker-compose.yml      # Docker Compose configuration
 ├── Dockerfile              # Docker image definition
-├── entrypoint.sh           # Docker entrypoint script
 ├── requirements.txt        # Python dependencies
 ├── env.example             # Environment variables template
 ├── .gitignore             # Git ignore rules
-├── Makefile               # Common commands
 ├── manage.py              # Django management script
 └── README.md              # This file
 ```
@@ -120,6 +118,7 @@ Copy `env.example` to `.env` and configure:
 - `USE_SQLITE`: Use SQLite instead of PostgreSQL (local development)
 - `ALLOWED_HOSTS`: Comma-separated list of allowed hosts (production)
 - `DJANGO_SUPERUSER_*`: Automatic superuser creation
+- `DJANGO_ENV`: Environment setting (local/prod)
 
 ## Database Configuration
 
@@ -127,7 +126,7 @@ Copy `env.example` to `.env` and configure:
 The project is configured to use PostgreSQL by default. Update the database settings in your `.env` file:
 
 ```env
-DB_NAME=zakat
+DB_NAME=myproject
 DB_USER=postgres
 DB_PASSWORD=postgres
 DB_HOST=localhost  # or 'db' for Docker
@@ -185,10 +184,10 @@ python manage.py check --deploy
 ### Docker Production
 ```bash
 # Build production image
-docker build --target production -t zakat:prod .
+docker build -t myproject:prod .
 
 # Run with production settings
-docker run -e DJANGO_ENV=prod -p 8000:8000 zakat:prod
+docker run -e DJANGO_ENV=prod -p 8000:8000 myproject:prod
 ```
 
 ## Security Features
@@ -215,10 +214,18 @@ Default redirects:
 
 ## Development
 
+### Getting Started with This Template
+1. **Clone this repository** or download as a template
+2. **Rename the project** by updating the `config` folder name and references
+3. **Update the core app** name to match your project (or create new apps)
+4. **Configure environment variables** using the provided `env.example`
+5. **Start building your application!**
+
 ### Adding New Apps
 1. Create the app: `python manage.py startapp appname`
 2. Add to `INSTALLED_APPS` in `config/settings/base.py`
 3. Include URLs in `config/urls.py`
+4. Create templates in `templates/appname/` directory
 
 ### Database Migrations
 ```bash
@@ -261,6 +268,16 @@ python manage.py test core  # Test specific app
 - Review error logs in the console
 - Use Django's built-in error pages in development mode
 
+## Customization
+
+This template is designed to be easily customizable:
+
+- **Project Name**: Update folder names, database names, and references
+- **Apps**: Add new Django apps as needed for your project
+- **Templates**: Modify the Bootstrap-based templates to match your design
+- **Settings**: Add environment-specific configurations
+- **Database**: Switch between PostgreSQL and SQLite as needed
+
 ## License
 
-This project is for educational and development purposes.
+This Django base project template is provided for educational and development purposes. Feel free to use it as a starting point for your own Django projects.

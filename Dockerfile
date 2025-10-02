@@ -1,4 +1,4 @@
-# Simple Dockerfile for Django application
+# Dockerfile for Django Base Project Template
 FROM python:3.11-slim
 
 # Set environment variables
@@ -25,5 +25,6 @@ COPY . .
 # Expose port
 EXPOSE 8000
 
-# Default command - just run Django dev server
+# Default command - run Django development server
+# For production, use gunicorn instead
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
