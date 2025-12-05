@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,9 +16,12 @@
             <div class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
                     <span class="navbar-text me-3">
-                        Benvenuto, {{ user.username }}!
+                        Welcome, {{ user.username }}!
                     </span>
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    <form method="post" action="{% url 'logout' %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link border-0 bg-transparent logout-btn">Logout</button>
+                    </form>
                 {% else %}
                     <a class="nav-link" href="{% url 'login' %}">Login</a>
                 {% endif %}

@@ -7,12 +7,12 @@
     <div class="col-md-6 col-lg-4">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title mb-0">Accedi</h4>
+                <h4 class="card-title mb-0">Login</h4>
             </div>
             <div class="card-body">
                 {% if form.errors %}
                     <div class="alert alert-danger">
-                        <strong>Errore!</strong> Controlla i dati inseriti.
+                        <strong>Error!</strong> Please check your credentials.
                         {{ form.errors }}
                     </div>
                 {% endif %}
@@ -20,7 +20,7 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="{{ form.username.id_for_label }}" class="form-label">Nome utente</label>
+                        <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
                         {{ form.username }}
                         {% if form.username.errors %}
                             <div class="text-danger">{{ form.username.errors }}</div>
@@ -35,7 +35,7 @@
                         {% endif %}
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Accedi</button>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
                 </form>
             </div>
         </div>
