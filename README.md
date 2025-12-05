@@ -154,7 +154,20 @@ This project is **optimized for Railway deployment**. You can deploy it directly
    - **Database**: Just create a PostgreSQL service and click "Connect" - Railway automatically sets `DATABASE_URL` (no manual variables needed!)
    - `DJANGO_SUPERUSER_USERNAME`, `DJANGO_SUPERUSER_EMAIL`, `DJANGO_SUPERUSER_PASSWORD` (optional)
 
-3. **Deploy!** Railway will:
+3. **Media Files Storage** (for user uploads):
+   
+   **Option 1: Railway Volume (Recommended for small quantities)**
+   - In Railway dashboard, go to your service → "Volumes" tab
+   - Click "Add Volume" and mount it to `/app/media` in your service
+   - This is super easy and perfect for small to medium file quantities
+   - Files persist across deployments
+   
+   **Option 2: Cloud Storage Bucket (For larger scale)**
+   - Use AWS S3, Google Cloud Storage, or similar
+   - Configure `DEFAULT_FILE_STORAGE` in `config/settings/prod.py`
+   - More complex setup but better for production at scale
+
+4. **Deploy!** Railway will:
    - Build the Docker image using the `Dockerfile`
    - Run `start.sh` which automatically:
      - Runs migrations
