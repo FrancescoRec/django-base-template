@@ -1,5 +1,5 @@
 """
-ASGI config for zakat project.
+ASGI config for Django project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

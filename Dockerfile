@@ -22,9 +22,12 @@ RUN pip install -r requirements.txt
 # Copy project files
 COPY . .
 
-# Expose port
+# Copy startup script
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
+# Expose port (Railway uses $PORT env variable)
 EXPOSE 8000
 
-# Default command - run Django development server
-# For production, use gunicorn instead
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Production command - use startup script
+CMD ["/app/start.sh"]

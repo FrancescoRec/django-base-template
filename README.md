@@ -1,12 +1,13 @@
 # Django Base Project Template
 
-A comprehensive Django 5 base project template with PostgreSQL database, Docker support, and production-ready configuration. This template provides a solid foundation for building Django applications with modern best practices.
+A comprehensive Django 5 base project template with PostgreSQL database, Docker support, and production-ready configuration (optimized for Railway deployment). 
+This template provides a solid foundation for building Django applications with modern best practices.
 
 ## Features
 
 - **Django 5.0+** with Python 3.11+
 - **Modular Settings** - Separated settings for development, staging, and production
-- **Database Support** - PostgreSQL with SQLite fallback for development
+- **Database Support** - PostgreSQL database
 - **Docker Ready** - Complete Docker and Docker Compose configuration
 - **Authentication** - Built-in user authentication with login/logout
 - **Modern UI** - Bootstrap-styled responsive templates
@@ -15,55 +16,31 @@ A comprehensive Django 5 base project template with PostgreSQL database, Docker 
 - **Environment Management** - Comprehensive environment variable configuration
 - **Development Tools** - Ready for debugging and testing
 
-## Quick Start (Windows PowerShell)
-
-### Local Development Setup
-
-1. **Clone and setup virtual environment:**
-```powershell
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-```
-
-2. **Configure environment variables:**
-```powershell
-# Copy the example environment file
-Copy-Item env.example .env
-
-# Set Django settings module (PowerShell)
-$env:DJANGO_SETTINGS_MODULE = "config.settings.local"
-
-# Or permanently set it (requires admin privileges)
-setx DJANGO_SETTINGS_MODULE "config.settings.local"
-```
-
-3. **Run migrations and start server:**
-```powershell
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
-```
-
-4. **Access the application:**
-   - Application: http://127.0.0.1:8000
-   - Admin: http://127.0.0.1:8000/admin
+## Quick Start
 
 ### Docker Development Setup
+
 
 1. **Copy environment file:**
 ```powershell
 Copy-Item env.example .env
 ```
 
-2. **Start with Docker Compose:**
+2. **Build and start containers:**
 ```powershell
-docker-compose up --build
+docker-compose build
+docker-compose up
 ```
 
-3. **Access the application:**
+3. **Run initial migrations:**
+```powershell
+docker-compose run --rm django python manage.py migrate
+docker-compose run --rm django python manage.py createsuperuser
+```
+
+4. **Access the application:**
    - Application: http://localhost:8000
-   - PostgreSQL: localhost:5432
+   - PostgreSQL: localhost:5433 (mapped from container port 5432)
 
 ## Project Structure
 
@@ -115,80 +92,78 @@ Copy `env.example` to `.env` and configure:
 - `DB_HOST`, `DB_PORT`: Database connection
 
 ### Optional Variables
-- `USE_SQLITE`: Use SQLite instead of PostgreSQL (local development)
 - `ALLOWED_HOSTS`: Comma-separated list of allowed hosts (production)
-- `DJANGO_SUPERUSER_*`: Automatic superuser creation
-- `DJANGO_ENV`: Environment setting (local/prod)
+- `DJANGO_SUPERUSER_*`: Automatic superuser creation (for Railway deployment)
 
 ## Database Configuration
 
-### PostgreSQL (Default)
-The project is configured to use PostgreSQL by default. Update the database settings in your `.env` file:
+The project supports two database configuration methods:
+
+### Railway Deployment (Production)
+
+Railway automatically provides a `DATABASE_URL` environment variable when you add a PostgreSQL service. The project automatically detects and uses this:
+
+1. **Add PostgreSQL service** in Railway dashboard
+2. **Click "Connect"** - Railway automatically sets `DATABASE_URL`
+3. **No manual configuration needed!** The project automatically uses `DATABASE_URL`
+
+The `DATABASE_URL` format: `postgresql://user:password@host:port/dbname`
+
+### Local Development (Docker)
+
+For local development, use individual database variables in your `.env` file:
 
 ```env
 DB_NAME=myproject
 DB_USER=postgres
 DB_PASSWORD=postgres
-DB_HOST=localhost  # or 'db' for Docker
+DB_HOST=db  # Use 'db' for Docker Compose (service name)
 DB_PORT=5432
 ```
 
-### SQLite (Development Alternative)
-For local development, you can use SQLite instead:
-
-```env
-USE_SQLITE=true
-```
+**Note:** The project automatically detects which method to use:
+- If `DATABASE_URL` exists → uses Railway/Heroku style connection
+- Otherwise → falls back to individual variables for local development
 
 ## Available Commands
 
-### Using Makefile
+### Django Management Commands (with Docker)
 ```bash
-make install      # Install dependencies
-make migrate      # Run database migrations
-make superuser    # Create Django superuser
-make run          # Start development server
-make test         # Run tests
-make docker-up    # Start Docker containers
-make docker-down  # Stop Docker containers
+# All Django commands must be run inside the container
+docker-compose run --rm django python manage.py migrate
+docker-compose run --rm django python manage.py createsuperuser
+docker-compose run --rm django python manage.py makemigrations
+docker-compose run --rm django python manage.py collectstatic
+docker-compose run --rm django python manage.py test
 ```
 
-### Using Django Management Commands
-```bash
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
-python manage.py collectstatic
-python manage.py test
-```
+**Note:** The `--rm` flag automatically removes the container after the command completes.
 
 ## Production Deployment
 
-### Environment Setup
-1. Set `DJANGO_SETTINGS_MODULE=config.settings.prod`
-2. Configure production environment variables
-3. Set `DEBUG=False`
-4. Configure `ALLOWED_HOSTS`
-5. Use strong `SECRET_KEY`
+### Railway Deployment (Optimized)
 
-### Static Files
-```bash
-python manage.py collectstatic --noinput
-```
+This project is **optimized for Railway deployment**. You can deploy it directly without any changes:
 
-### Security Check
-```bash
-python manage.py check --deploy
-```
+1. **Connect your repository to Railway**
+2. **Set environment variables** in Railway dashboard:
+   - `DJANGO_SETTINGS_MODULE=config.settings.prod`
+   - `SECRET_KEY` (generate a strong secret key)
+   - `DEBUG=False`
+   - `ALLOWED_HOSTS` (your Railway domain)
+   - **Database**: Just create a PostgreSQL service and click "Connect" - Railway automatically sets `DATABASE_URL` (no manual variables needed!)
+   - `DJANGO_SUPERUSER_USERNAME`, `DJANGO_SUPERUSER_EMAIL`, `DJANGO_SUPERUSER_PASSWORD` (optional)
 
-### Docker Production
-```bash
-# Build production image
-docker build -t myproject:prod .
+3. **Deploy!** Railway will:
+   - Build the Docker image using the `Dockerfile`
+   - Run `start.sh` which automatically:
+     - Runs migrations
+     - Creates superuser (if configured)
+     - Collects static files
+     - Starts the server with Gunicorn
 
-# Run with production settings
-docker run -e DJANGO_ENV=prod -p 8000:8000 myproject:prod
-```
+**No manual setup required!** The `start.sh` script handles everything automatically.
+
 
 ## Security Features
 
@@ -214,29 +189,22 @@ Default redirects:
 
 ## Development
 
-### Getting Started with This Template
-1. **Clone this repository** or download as a template
-2. **Rename the project** by updating the `config` folder name and references
-3. **Update the core app** name to match your project (or create new apps)
-4. **Configure environment variables** using the provided `env.example`
-5. **Start building your application!**
-
 ### Adding New Apps
-1. Create the app: `python manage.py startapp appname`
+1. Create the app: `docker-compose run --rm django python manage.py startapp appname`
 2. Add to `INSTALLED_APPS` in `config/settings/base.py`
 3. Include URLs in `config/urls.py`
 4. Create templates in `templates/appname/` directory
 
 ### Database Migrations
 ```bash
-python manage.py makemigrations
-python manage.py migrate
+docker-compose run --rm django python manage.py makemigrations
+docker-compose run --rm django python manage.py migrate
 ```
 
 ### Running Tests
 ```bash
-python manage.py test
-python manage.py test core  # Test specific app
+docker-compose run --rm django python manage.py test
+docker-compose run --rm django python manage.py test core  # Test specific app
 ```
 
 ## Troubleshooting
@@ -249,15 +217,10 @@ python manage.py test core  # Test specific app
    - For Docker: ensure `db` service is up
 
 2. **Static files not loading:**
-   - Run `python manage.py collectstatic`
+   - Run `docker-compose run --rm django python manage.py collectstatic`
    - Check `STATIC_URL` and `STATIC_ROOT` settings
 
-3. **Permission denied on entrypoint.sh:**
-   ```bash
-   chmod +x entrypoint.sh
-   ```
-
-4. **Docker build errors:**
+3. **Docker build errors:**
    - Check Docker is running
    - Verify Dockerfile syntax
    - Try `docker system prune` to clean up
@@ -276,7 +239,6 @@ This template is designed to be easily customizable:
 - **Apps**: Add new Django apps as needed for your project
 - **Templates**: Modify the Bootstrap-based templates to match your design
 - **Settings**: Add environment-specific configurations
-- **Database**: Switch between PostgreSQL and SQLite as needed
 
 ## License
 

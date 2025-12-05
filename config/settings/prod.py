@@ -1,5 +1,5 @@
 """
-Production settings for zakat project.
+Production settings for Django project.
 """
 
 from .base import *

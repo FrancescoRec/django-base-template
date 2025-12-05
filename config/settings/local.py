@@ -1,5 +1,5 @@
 """
-Local development settings for zakat project.
+Local development settings for Django project.
 """
 
 from .base import *

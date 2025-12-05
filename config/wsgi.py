@@ -1,5 +1,5 @@
 """
-WSGI config for zakat project.
+WSGI config for Django project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
