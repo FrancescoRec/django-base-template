@@ -29,7 +29,7 @@ access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
 reload = os.getenv('GUNICORN_RELOAD', 'False').lower() == 'true'
 
 # Process naming
-proc_name = 'builderex'
+proc_name = 'django_app'
 
 # Server mechanics
 daemon = False

@@ -2,7 +2,7 @@
 
 set -e
 
-echo "=== Starting Digital Speed deployment ==="
+echo "=== Starting Django deployment ==="
 
 echo "Step 1: Running migrations..."
 python manage.py migrate --settings=config.settings.prod
@@ -12,7 +12,7 @@ python manage.py shell --settings=config.settings.prod -c "
 import os
 from django.contrib.auth.models import User
 username = os.environ.get('DJANGO_SUPERUSER_USERNAME', 'admin')
-email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'admin@digitalspeed.com')
+email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'admin@example.com')
 password = os.environ.get('DJANGO_SUPERUSER_PASSWORD', 'admin123')
 if not User.objects.filter(username=username).exists():
     User.objects.create_superuser(username, email, password)
