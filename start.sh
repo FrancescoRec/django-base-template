@@ -25,4 +25,4 @@ echo "Step 3: Collecting static files..."
 python manage.py collectstatic --noinput --settings=config.settings.prod
 
 echo "Step 4: Starting server..."
-python manage.py runserver 0.0.0.0:${PORT:-8000} --settings=config.settings.prod
+gunicorn config.wsgi:application -c gunicorn.conf.py

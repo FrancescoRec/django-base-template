@@ -1,17 +1,18 @@
 services:
   django:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
     volumes:
       - .:/app
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.local
+      - GUNICORN_RELOAD=true
     env_file:
       - .env
     depends_on:
       - db
+    command: bash -c "python manage.py migrate --settings=config.settings.local && gunicorn config.wsgi:application -c gunicorn.conf.py"
 
   db:
     image: postgres:16
