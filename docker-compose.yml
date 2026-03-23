@@ -7,12 +7,11 @@ services:
       - .:/app
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.local
-      - GUNICORN_RELOAD=true
     env_file:
       - .env
     depends_on:
       - db
-    command: bash -c "python manage.py migrate --settings=config.settings.local && gunicorn config.wsgi:application -c gunicorn.conf.py"
+    command: bash -c "python manage.py migrate --settings=config.settings.local && python manage.py runserver 0.0.0.0:8000 --settings=config.settings.local"
 
   db:
     image: postgres:16
